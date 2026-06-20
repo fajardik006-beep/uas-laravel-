@@ -16,21 +16,30 @@ class TurnamenController extends Controller
 
     // 2. MENYIMPAN DATA BARU
     public function store(Request $request)
-    {
-        // Pastikan nama validasinya sesuai dengan kolom di databasemu
-        $request->validate([
-            'nama_turnamen' => 'required|string',
-            // tambahkan validasi lain jika ada...
-        ]);
+{
+    // 1. Validasi semua field yang ada di form
+    $request->validate([
+        'nama_turnamen' => 'required|string',
+        'game_name'     => 'required|string',
+        'hadiah'        => 'required',
+        'tanggal_pelaksanaan' => 'required|date',
+        'deskripsi'     => 'required|string',
+        // 'link_daftar' bersifat opsional jadi tidak wajib
+    ]);
 
-        Turnamen::create([
-            'user_id' => auth()->id(), // Mencatat siapa yang membuat
-            'nama_turnamen' => $request->nama_turnamen,
-            // tambahkan kolom lain jika ada...
-        ]);
+    // 2. Simpan semua data yang dikirim dari form
+    Turnamen::create([
+        'user_id'             => auth()->id(),
+        'nama_turnamen'       => $request->nama_turnamen,
+        'game_name'           => $request->game_name,
+        'hadiah'              => $request->hadiah,
+        'tanggal_pelaksanaan' => $request->tanggal_pelaksanaan,
+        'deskripsi'           => $request->deskripsi,
+        'link_daftar'         => $request->link_daftar,
+    ]);
 
-        return redirect()->back()->with('success', 'Turnamen berhasil dibuat!');
-    }
+    return redirect()->back()->with('success', 'Turnamen berhasil dibuat!');
+}
 
     // 3. HALAMAN EDIT (HANYA ADMIN)
     public function edit($id)
